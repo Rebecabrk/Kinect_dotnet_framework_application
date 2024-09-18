@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
-using System.Diagnostics;
 
 namespace Kinect_dotnet_framework
 {
@@ -24,6 +23,10 @@ namespace Kinect_dotnet_framework
     {
         KinectSensor kinectSensor;
         Skeleton[] skeletons;
+        const float movementThreshold_X = 0.05f;         //minimum distance (left-right) to be considered a shake
+        float previousRightHandPosition_X = 0;               
+        int shakeCount = 0;                 
+        const int shakeCountThreshold = 2;              //minimum of shakes to be considered waving
 
         public MainWindow()
         {
@@ -69,6 +72,7 @@ namespace Kinect_dotnet_framework
                         SetEllipsePosition(HeadEllipse, skeleton.Joints[JointType.Head]);
                         SetEllipsePosition(LeftHandEllipse, skeleton.Joints[JointType.HandLeft]);
                         SetEllipsePosition(RightHandEllipse, skeleton.Joints[JointType.HandRight]);
+                        TrackHandShake(skeleton);
                     }
                 }
             }
@@ -76,12 +80,56 @@ namespace Kinect_dotnet_framework
 
         private void SetEllipsePosition(Ellipse ellipse, Joint joint)
         {
-            if(joint.TrackingState == JointTrackingState.Tracked)
+            if (joint.TrackingState == JointTrackingState.Tracked)
             {
                 DepthImagePoint point = kinectSensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
 
                 Canvas.SetLeft(ellipse, point.X);
                 Canvas.SetTop(ellipse, point.Y);
+            }
+        }
+
+        private void TrackHandShake(Skeleton skeleton)
+        {
+            Joint rightHand = skeleton.Joints[JointType.HandRight];
+
+            if (rightHand.TrackingState == JointTrackingState.Tracked) {
+                var rightHandPosition = skeleton.Joints[JointType.HandRight].Position;
+
+                float distanceMoved_X = Math.Abs(rightHandPosition.X - previousRightHandPosition_X);
+
+                if(distanceMoved_X >= movementThreshold_X)
+                {
+                    shakeCount++;
+                }
+
+                if (shakeCount >= shakeCountThreshold)
+                {
+                    DisplayHello("Hello!");
+                    shakeCount = 0;
+                }
+
+                previousRightHandPosition_X = rightHandPosition.X;
+            }
+        }
+
+        private void DisplayHello(string message)
+        {
+            // Update the UI on the main thread
+            Dispatcher.Invoke(() =>
+            {
+                messageTextBlock.Text = message;
+            });
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            // the base class will perform any necessary cleaning
+            base.OnClosed(e);
+
+            if(kinectSensor != null)
+            {
+                kinectSensor.Stop();
             }
         }
     }

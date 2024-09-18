@@ -12,5 +12,6 @@
             <Ellipse Name="LeftHandEllipse" Width="30" Height="30" Fill="green"/>
             <Ellipse Name="RightHandEllipse" Width="30" Height="30" Fill="blue"/>
         </Canvas>
+        <TextBlock x:Name="messageTextBlock" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
