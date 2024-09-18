@@ -1,0 +1,16 @@
+﻿<Window x:Class="Kinect_dotnet_framework.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kinect_dotnet_framework"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Canvas Name="SkeletonCanvas">
+            <Ellipse Name="HeadEllipse" Width="30" Height="30" Fill="red"/>
+            <Ellipse Name="LeftHandEllipse" Width="30" Height="30" Fill="green"/>
+            <Ellipse Name="RightHandEllipse" Width="30" Height="30" Fill="blue"/>
+        </Canvas>
+    </Grid>
+</Window>
