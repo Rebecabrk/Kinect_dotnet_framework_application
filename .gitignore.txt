@@ -1,5 +1,7 @@
-# Ignore Visual Studio files
-.vs/
+# Ignore Visual Studio build folders
+bin/
+obj/
 
-# Ignore Git ignore file such that it is not pushed to repo
-#.gitignore
+# Optional: Ignore Debug build files (if needed)
+#*.exe
+#*.pdb
