@@ -2,6 +2,7 @@
 bin/
 obj/
 
-# Optional: Ignore Debug build files (if needed)
-#*.exe
-#*.pdb
+# Ignore build output files
+*.exe
+*.pdb
+*.cache
