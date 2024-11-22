@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.Kinect;
 
 namespace Kinect_dotnet_framework
@@ -120,6 +121,15 @@ namespace Kinect_dotnet_framework
             {
                 messageTextBlock.Text = message;
             });
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(3);
+            timer.Tick += (sender, e) =>
+            {
+                messageTextBlock.Text = "";
+                timer.Stop();
+            };
+            timer.Start();
         }
 
         protected override void OnClosed(EventArgs e)
