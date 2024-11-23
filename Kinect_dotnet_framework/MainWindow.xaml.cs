@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.Kinect;
+using Emgu.CV;
+using System.Threading.Tasks;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
+using System.Drawing;
 
 namespace Kinect_dotnet_framework
 {
@@ -74,12 +71,13 @@ namespace Kinect_dotnet_framework
                         SetEllipsePosition(LeftHandEllipse, skeleton.Joints[JointType.HandLeft]);
                         SetEllipsePosition(RightHandEllipse, skeleton.Joints[JointType.HandRight]);
                         TrackHandShake(skeleton);
+                        TrackHandRaise(skeleton);
                     }
                 }
             }
         }
 
-        private void SetEllipsePosition(Ellipse ellipse, Joint joint)
+        private void SetEllipsePosition(System.Windows.Shapes.Ellipse ellipse, Joint joint)
         {
             if (joint.TrackingState == JointTrackingState.Tracked)
             {
@@ -114,19 +112,82 @@ namespace Kinect_dotnet_framework
             }
         }
 
+        private void TrackHandRaise(Skeleton skeleton)
+        {
+            Joint rightHand = skeleton.Joints[JointType.HandRight];
+            Joint leftHand = skeleton.Joints[JointType.HandLeft];
+            Joint chest = skeleton.Joints[JointType.ShoulderCenter];
+
+            if (rightHand.TrackingState == JointTrackingState.Tracked && rightHand.Position.Y > chest.Position.Y)
+            {
+                Task.Run(() =>
+                {
+                    int rightHandFingers = CountFingers(rightHand);
+                    DisplayFingerCount("Right Hand: " + rightHandFingers);
+                });
+            }
+
+            if (leftHand.TrackingState == JointTrackingState.Tracked && leftHand.Position.Y > chest.Position.Y)
+            {
+                Task.Run(() =>
+                {
+                    int leftHandFingers = CountFingers(leftHand);
+                    DisplayFingerCount("Left Hand: " + leftHandFingers);
+                });
+            }
+        }
+
+        private int CountFingers(Joint handJoint)
+        {
+            //to do: implement finger counting algorithm
+            Random random = new Random();
+            return random.Next(0, 6);
+        }
+
+        private void DisplayFingerCount(string message)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (message.StartsWith("Left Hand:"))
+                {
+                    LeftFingerCountTextBlock.Text = message;
+                }
+                else if (message.StartsWith("Right Hand:"))
+                {
+                    RightFingerCountTextBlock.Text = message;
+                }
+            });
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(7);
+            timer.Tick += (sender, e) =>
+            {
+                if (message.StartsWith("Left Hand:"))
+                {
+                    LeftFingerCountTextBlock.Text = "";
+                }
+                else if (message.StartsWith("Right Hand:"))
+                {
+                    RightFingerCountTextBlock.Text = "";
+                }
+                timer.Stop();
+            };
+            timer.Start();
+        }
+
         private void DisplayHello(string message)
         {
             // Update the UI on the main thread
             Dispatcher.Invoke(() =>
             {
-                messageTextBlock.Text = message;
+                WaveTextBlock.Text = message;
             });
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(3);
             timer.Tick += (sender, e) =>
             {
-                messageTextBlock.Text = "";
+                WaveTextBlock.Text = "";
                 timer.Stop();
             };
             timer.Start();
