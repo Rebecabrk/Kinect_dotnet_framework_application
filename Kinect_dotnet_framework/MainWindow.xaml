@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Canvas Name="SkeletonCanvas">
-            <Ellipse Name="HeadEllipse" Width="30" Height="30" Fill="red"/>
-            <Ellipse Name="LeftHandEllipse" Width="30" Height="30" Fill="green"/>
-            <Ellipse Name="RightHandEllipse" Width="30" Height="30" Fill="blue"/>
+        <Canvas Name="SkeletonCanvas" Margin="0,10,0,-10">
+            <Image Name="HeadImage" Width="76" Height="80" Source="pack://application:,,,/Resources/avatar_head.jpeg" Canvas.Left="362" Canvas.Top="103"/>
+            <Image Name="LeftHandImage" Width="49" Height="45" Source="pack://application:,,,/Resources/avatar_left_hand.jpeg" Canvas.Left="320" Canvas.Top="200"/>
+            <Image Name="RightHandImage" Width="49" Height="45" Source="pack://application:,,,/Resources/avatar_right_hand.jpeg" Canvas.Left="438" Canvas.Top="200"/>
         </Canvas>
         <TextBlock x:Name="WaveTextBlock" FontSize="32" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
         <TextBlock x:Name="RightFingerCountTextBlock" FontSize="32" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>

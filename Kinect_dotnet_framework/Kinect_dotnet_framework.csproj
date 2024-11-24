@@ -147,5 +147,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\avatar_right_hand.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\avatar_head.jpeg" />
+    <Resource Include="Resources\avatar_left_hand.jpeg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

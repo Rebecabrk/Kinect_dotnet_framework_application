@@ -67,9 +67,9 @@ namespace Kinect_dotnet_framework
 
                     if(skeleton != null)
                     {
-                        SetEllipsePosition(HeadEllipse, skeleton.Joints[JointType.Head]);
-                        SetEllipsePosition(LeftHandEllipse, skeleton.Joints[JointType.HandLeft]);
-                        SetEllipsePosition(RightHandEllipse, skeleton.Joints[JointType.HandRight]);
+                        SetImagePosition(HeadImage, skeleton.Joints[JointType.Head]);
+                        SetImagePosition(LeftHandImage, skeleton.Joints[JointType.HandLeft]);
+                        SetImagePosition(RightHandImage, skeleton.Joints[JointType.HandRight]);
                         TrackHandShake(skeleton);
                         TrackHandRaise(skeleton);
                     }
@@ -77,14 +77,14 @@ namespace Kinect_dotnet_framework
             }
         }
 
-        private void SetEllipsePosition(System.Windows.Shapes.Ellipse ellipse, Joint joint)
+        private void SetImagePosition(System.Windows.Controls.Image image, Joint joint)
         {
             if (joint.TrackingState == JointTrackingState.Tracked)
             {
                 DepthImagePoint point = kinectSensor.CoordinateMapper.MapSkeletonPointToDepthPoint(joint.Position, DepthImageFormat.Resolution640x480Fps30);
 
-                Canvas.SetLeft(ellipse, point.X);
-                Canvas.SetTop(ellipse, point.Y);
+                Canvas.SetLeft(image, point.X);
+                Canvas.SetTop(image, point.Y);
             }
         }
 
